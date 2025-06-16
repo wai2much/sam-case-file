@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Case File: The Ordeal of Sam</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Harmony -->
+    <!-- Application Structure Plan: A single-page application structured into four thematic, navigable sections: 'The Story' (interactive timeline), 'The Evidence' (data visualization and key facts), 'The Impact' (card-based breakdown of personal costs), and 'The Resolution' (clear call to action). This non-linear, thematic structure was chosen to allow a reviewer to quickly grasp the core facts, see the undeniable proof of the error via data, understand the human cost, and know the desired outcome, making for a more persuasive and efficient review than a linear letter. -->
+    <!-- Visualization & Content Choices: 1) Timeline (HTML/CSS): To show the prolonged suffering vs. rapid recovery. Goal: Change. Interaction: Highlights key dates. Justification: More engaging and scannable than text. 2) Bar Chart (Chart.js): To compare recovery times between the two surgeries. Goal: Compare. Interaction: Tooltips on hover. Justification: A stark, quantitative visual is highly persuasive. 3) Card Layout (HTML/CSS with Unicode Icons): To categorize the personal, family, and professional impact. Goal: Organize. Justification: Breaks down complex emotional costs into clear themes. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* slate-50 */
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            top: 1rem;
+            left: -0.875rem;
+            width: 1.75rem;
+            height: 1.75rem;
+            border-radius: 50%;
+            background-color: #f8fafc;
+            border: 4px solid #1e3a8a; /* blue-800 */
+        }
+        .timeline-item:last-child .timeline-line {
+            display: none;
+        }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <header class="bg-slate-800 text-white p-4 md:p-6 sticky top-0 z-50 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <div>
+                <h1 class="text-xl md:text-2xl font-bold">Case File: The Ordeal of Sam</h1>
+                <p class="text-sm text-slate-300">A 13-Month Nightmare Caused by a Preventable Medical Error</p>
+            </div>
+            <nav class="hidden md:flex space-x-4">
+                <a href="#story" class="hover:text-blue-300 transition-colors">The Story</a>
+                <a href="#evidence" class="hover:text-blue-300 transition-colors">The Evidence</a>
+                <a href="#impact" class="hover:text-blue-300 transition-colors">The Impact</a>
+                <a href="#resolution" class="hover:text-blue-300 transition-colors">The Resolution</a>
+                <button id="summarizeBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-md text-sm font-semibold transition-colors flex items-center gap-1">Generate Summary ✨</button>
+                <button id="nextStepsBtn" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-md text-sm font-semibold transition-colors flex items-center gap-1">Suggest Next Steps ✨</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-4 md:p-8">
+        <section id="story" class="py-16 scroll-mt-20">
+            <h2 class="text-3xl font-bold text-center mb-4">A Timeline of Suffering</h2>
+            <p class="text-center max-w-3xl mx-auto text-slate-600 mb-12">This timeline chronicles the journey from a hopeful surgery to a prolonged, painful ordeal, and the final, stark contrast of a successful corrective procedure. It's a story of lost time, shattered trust, and the undeniable impact of a medical misstep.</p>
+            <div class="relative max-w-2xl mx-auto">
+                <div class="timeline-item relative pl-8 pb-12">
+                    <div class="absolute left-0 h-full w-0.5 bg-slate-300 timeline-line"></div>
+                    <p class="font-semibold text-blue-800">March 20, 2024</p>
+                    <h3 class="text-xl font-bold mt-1">Hope: The Initial Surgery</h3>
+                    <p class="mt-2 text-slate-600">Sam undergoes a hip replacement, trusting he is on the path to reclaiming his life from chronic pain.</p>
+                </div>
+                <div class="timeline-item relative pl-8 pb-12">
+                     <div class="absolute left-0 h-full w-0.5 bg-slate-300 timeline-line"></div>
+                    <p class="font-semibold text-red-800">March 2024 - February 2025</p>
+                    <h3 class="text-xl font-bold mt-1">13 Months of Unexplained Agony</h3>
+                    <p class="mt-2 text-slate-600">A year of constant, 24-hour pain and severe immobility follows. Dependent on crutches, Sam's condition does not improve despite diligent physiotherapy, leaving him and his family baffled and desperate.</p>
+                </div>
+                <div class="timeline-item relative pl-8 pb-12">
+                     <div class="absolute left-0 h-full w-0.5 bg-slate-300 timeline-line"></div>
+                    <p class="font-semibold text-blue-800">February 2025</p>
+                    <h3 class="text-xl font-bold mt-1">Revelation: The Devastating Diagnosis</h3>
+                    <p class="mt-2 text-slate-600">A second specialist, Dr. Sam Bewsher, reviews the case and delivers the crucial diagnosis: the initial implant was incorrectly sized. He calls it a "terrible, terrible mistake."</p>
+                </div>
+                <div class="timeline-item relative pl-8 pb-12">
+                     <div class="absolute left-0 h-full w-0.5 bg-slate-300 timeline-line"></div>
+                    <p class="font-semibold text-green-700">April 2025</p>
+                    <h3 class="text-xl font-bold mt-1">Proof: The Corrective Surgery</h3>
+                    <p class="mt-2 text-slate-600">Dr. Bewsher performs a corrective surgery with the properly sized implant.</p>
+                </div>
+                <div class="timeline-item relative pl-8 pb-12">
+                     <div class="absolute left-0 h-full w-0.5 bg-slate-300 timeline-line"></div>
+                    <p class="font-semibold text-green-700">Within 10 Days</p>
+                    <h3 class="text-xl font-bold mt-1">Vindication: A Miraculous Recovery</h3>
+                    <p class="mt-2 text-slate-600">The recovery is immediate and profound. Sam is back at work and walking independently within 10 days, proving the initial error was the sole cause of his year-long suffering.</p>
+                </div>
+            </div>
+        </section>
+
+        <hr class="my-16 border-slate-300">
+
+        <section id="evidence" class="py-16 scroll-mt-20">
+            <h2 class="text-3xl font-bold text-center mb-4">The Undeniable Evidence</h2>
+             <p class="text-center max-w-3xl mx-auto text-slate-600 mb-12">The facts of this case are clear and supported by expert medical assessment. The stark difference in outcomes between the two procedures provides irrefutable proof of the initial, preventable error.</p>
+            <div class="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+                <div class="bg-white p-6 rounded-lg shadow-md border border-slate-200">
+                    <h3 class="text-xl font-bold mb-4">The Error: A "Terrible Mistake"</h3>
+                    <p class="mb-2"><strong class="text-slate-900">Initial Surgeon:</strong> Dr. Anna Manolopoulos</p>
+                    <p class="mb-4"><strong class="text-slate-900">Date:</strong> March 20, 2024</p>
+                    <div class="bg-red-50 border-l-4 border-red-500 text-red-800 p-4 rounded-r-lg">
+                        <p class="font-bold">Expert Finding by Dr. Sam Bewsher:</p>
+                        <p class="mt-1">The initial hip implant was incorrectly sized – it was too small.</p>
+                        <p class="mt-3 italic">Dr. Bewsher explicitly stated the surgery was a "terrible, terrible mistake" and advised that compensation was warranted.</p>
+                    </div>
+                </div>
+                <div>
+                     <h3 class="text-xl font-bold mb-4 text-center md:text-left">Recovery Comparison: A Visual Proof</h3>
+                    <div class="chart-container">
+                        <canvas id="recoveryChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <hr class="my-16 border-slate-300">
+
+        <section id="impact" class="py-16 scroll-mt-20">
+            <h2 class="text-3xl font-bold text-center mb-4">The Human Cost: A Year Stolen</h2>
+            <p class="text-center max-w-3xl mx-auto text-slate-600 mb-12">Beyond the physical pain, the impact of this year-long ordeal has been devastating, affecting every facet of Sam's life. This section details the profound personal, family, and professional consequences as witnessed by those closest to him.</p>
+            <div class="grid md:grid-cols-3 gap-8 text-center">
+                <div class="bg-white p-6 rounded-lg shadow-md border border-slate-200">
+                    <p class="text-5xl mb-4">💔</p>
+                    <h3 class="text-xl font-bold mb-2">Family Life Eroded</h3>
+                    <p class="text-slate-600">Unable to fulfill his roles as a father, husband, and son. He missed countless family functions and was heartbreakingly separated from his elderly parents for over a year. A painful void was left where his presence should have been.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md border border-slate-200">
+                    <p class="text-5xl mb-4">👤</p>
+                    <h3 class="text-xl font-bold mb-2">Identity & Confidence Lost</h3>
+                    <p class="text-slate-600">The vibrant, engaged man became a "shadow of himself." At his job at Direct Discount Tyres, his usual confidence was replaced by a pervasive sadness. The ordeal has left lasting marks on his posture, voice, and self-assurance.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md border border-slate-200">
+                    <p class="text-5xl mb-4">🤕</p>
+                    <h3 class="text-xl font-bold mb-2">Lasting Physical Scars</h3>
+                    <p class="text-slate-600">While the acute pain is gone, the consequences remain. His posture is stiffer, his voice has changed, and the natural color of his face is different – constant, unwelcome reminders of the year stolen from his life.</p>
+                </div>
+            </div>
+        </section>
+
+        <hr class="my-16 border-slate-300">
+
+        <section id="resolution" class="py-16 scroll-mt-20 text-center">
+            <h2 class="text-3xl font-bold mb-4">A Call for Accountability and Resolution</h2>
+            <p class="max-w-3xl mx-auto text-slate-600 mb-8">This report is shared not for retribution, but for accountability. The evidence is clear, the expert opinion is unequivocal, and the human cost is immeasurable. A significant oversight in care occurred, and it demands a just and meaningful response.</p>
+            <div class="max-w-2xl mx-auto bg-blue-50 border-l-4 border-blue-500 p-6 rounded-r-lg text-left">
+                <h3 class="text-2xl font-bold text-blue-900">Requested Action</h3>
+                <p class="mt-4 text-lg text-blue-800">We urge the leadership of the hospital to recognize the gravity of this preventable error and take action to address the profound hardship Sam has endured.</p>
+                <p class="mt-4 font-bold text-lg text-blue-800">This includes a just resolution to the matter of compensation, as so clearly suggested by Dr. Sam Bewsher.</p>
+            </div>
+             <div class="mt-12">
+                <p class="text-slate-600">For further correspondence, please contact:</p>
+                <p class="font-semibold mt-2">[Your Full Name]</p>
+                <p class="text-slate-600">[Your Email Address] | [Your Phone Number]</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Summary Modal -->
+    <div id="summaryModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div class="bg-white p-6 rounded-lg shadow-xl max-w-xl w-full relative">
+            <button id="closeSummaryModal" class="absolute top-3 right-3 text-slate-500 hover:text-slate-700 text-2xl font-bold">&times;</button>
+            <h3 class="text-2xl font-bold mb-4 text-blue-800">Case Summary ✨</h3>
+            <div id="summaryContent" class="text-slate-700 max-h-[70vh] overflow-y-auto">
+                <p id="summaryLoading" class="text-center text-slate-500">Generating summary...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Next Steps Modal -->
+    <div id="nextStepsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div class="bg-white p-6 rounded-lg shadow-xl max-w-xl w-full relative">
+            <button id="closeNextStepsModal" class="absolute top-3 right-3 text-slate-500 hover:text-slate-700 text-2xl font-bold">&times;</button>
+            <h3 class="text-2xl font-bold mb-4 text-green-800">Suggested Next Steps ✨</h3>
+            <div id="nextStepsContent" class="text-slate-700 max-h-[70vh] overflow-y-auto">
+                <p id="nextStepsLoading" class="text-center text-slate-500">Analyzing case for next steps...</p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-slate-800 text-white text-center p-4 mt-16">
+        <p class="text-sm text-slate-400">&copy; 2025 | Case File for Sam | Confidential Report</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const ctx = document.getElementById('recoveryChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Initial Surgery (Dr. Manolopoulos)', 'Corrective Surgery (Dr. Bewsher)'],
+                    datasets: [{
+                        label: 'Time to Walk Unaided (in days)',
+                        data: [395, 10], 
+                        backgroundColor: [
+                            'rgba(191, 31, 31, 0.6)', // Muted Red
+                            'rgba(22, 163, 74, 0.6)'  // Muted Green
+                        ],
+                        borderColor: [
+                            'rgba(191, 31, 31, 1)',
+                            'rgba(22, 163, 74, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Days Until Recovery (Walking Unaided)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (context.parsed.x !== null) {
+                                        if (context.dataIndex === 0) {
+                                            return ' More than 395 days (13 months) - Unsuccessful';
+                                        }
+                                        return ` ${context.parsed.x} days - Successful`;
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            const navLinks = document.querySelectorAll('nav a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    if (this.hash !== "") {
+                        e.preventDefault();
+                        const hash = this.hash;
+                        document.querySelector(hash).scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+
+            // LLM Integration for Summary
+            const summarizeBtn = document.getElementById('summarizeBtn');
+            const summaryModal = document.getElementById('summaryModal');
+            const closeSummaryModal = document.getElementById('closeSummaryModal');
+            const summaryContent = document.getElementById('summaryContent');
+            const summaryLoading = document.getElementById('summaryLoading');
+
+            summarizeBtn.addEventListener('click', async () => {
+                summaryModal.classList.remove('hidden');
+                summaryContent.innerHTML = ''; // Clear previous content
+                summaryLoading.textContent = 'Generating summary... Please wait.'; // Show loading text
+                summaryContent.appendChild(summaryLoading);
+
+
+                // Collect content from the page
+                const storyText = document.querySelector('#story').innerText;
+                const evidenceText = document.querySelector('#evidence').innerText;
+                const impactText = document.querySelector('#impact').innerText;
+                const resolutionText = document.querySelector('#resolution').innerText;
+
+                const fullContent = `
+                    **Case File: The Ordeal of Sam**
+
+                    **Story Timeline:**
+                    ${storyText}
+
+                    **Evidence of Error:**
+                    ${evidenceText}
+
+                    **Human Impact:**
+                    ${impactText}
+
+                    **Requested Resolution:**
+                    ${resolutionText}
+                `;
+
+                const prompt = `Summarize the key events, medical error, personal impact (family, identity, professional), and requested resolution from the following case file regarding a hip replacement surgery. Keep it concise, objective, and around 150-200 words. Do not include any contact information or personal names unless they are essential for context:\n\n${fullContent}`;
+
+                try {
+                    let chatHistory = [];
+                    chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                    const payload = { contents: chatHistory };
+                    const apiKey = "";
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    const result = await response.json();
+
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        const text = result.candidates[0].content.parts[0].text;
+                        summaryContent.innerHTML = `<p>${text}</p>`; // Display the summary
+                    } else {
+                        summaryContent.innerHTML = '<p class="text-red-500">Error: Could not generate summary.</p>';
+                    }
+                } catch (error) {
+                    console.error('Error fetching summary:', error);
+                    summaryContent.innerHTML = `<p class="text-red-500">Error generating summary. Please try again. (${error.message})</p>`;
+                }
+            });
+
+            closeSummaryModal.addEventListener('click', () => {
+                summaryModal.classList.add('hidden');
+            });
+
+            // LLM Integration for Next Steps
+            const nextStepsBtn = document.getElementById('nextStepsBtn');
+            const nextStepsModal = document.getElementById('nextStepsModal');
+            const closeNextStepsModal = document.getElementById('closeNextStepsModal');
+            const nextStepsContent = document.getElementById('nextStepsContent');
+            const nextStepsLoading = document.getElementById('nextStepsLoading');
+
+            nextStepsBtn.addEventListener('click', async () => {
+                nextStepsModal.classList.remove('hidden');
+                nextStepsContent.innerHTML = ''; // Clear previous content
+                nextStepsLoading.textContent = 'Analyzing case for next steps... Please wait.'; // Show loading text
+                nextStepsContent.appendChild(nextStepsLoading);
+
+                // Collect content from the page
+                const storyText = document.querySelector('#story').innerText;
+                const evidenceText = document.querySelector('#evidence').innerText;
+                const impactText = document.querySelector('#impact').innerText;
+                const resolutionText = document.querySelector('#resolution').innerText;
+
+                const fullContent = `
+                    Case Summary:
+                    Patient Name: Sam
+                    Initial Surgery Date: March 20, 2024
+                    Problem: Incorrectly sized hip implant by Dr. Anna Manolopoulos, causing 13 months of constant pain and immobility.
+                    Expert Opinion: Dr. Sam Bewsher confirmed the error as a "terrible, terrible mistake" and recommended compensation.
+                    Corrective Surgery: April 2025, led to immediate recovery (walking unaided within 10 days).
+                    Impact: Severely affected family life (unable to fulfill roles, missed events, separated from parents), identity and confidence (became a "shadow of himself," pervasive sadness, lost confidence at work), and left lasting physical changes (stiffer posture, changed voice, different face color).
+                    Goal: Seeking accountability, understanding, and just compensation.
+                `;
+
+                const prompt = `Based on the following case summary of medical negligence, suggest concrete next steps for both Sam (the patient) and the person who wrote this report (a witness/supporter) to pursue accountability and compensation. Provide a numbered list of actionable items. Focus on practical, formal steps.
+                \n\n${fullContent}`;
+
+                try {
+                    let chatHistory = [];
+                    chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                    const payload = { contents: chatHistory };
+                    const apiKey = "";
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    const result = await response.json();
+
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        const text = result.candidates[0].content.parts[0].text;
+                        nextStepsContent.innerHTML = `<pre class="whitespace-pre-wrap">${text}</pre>`; // Display as pre-formatted text
+                    } else {
+                        nextStepsContent.innerHTML = '<p class="text-red-500">Error: Could not generate next steps.</p>';
+                    }
+                } catch (error) {
+                    console.error('Error fetching next steps:', error);
+                    nextStepsContent.innerHTML = `<p class="text-red-500">Error generating next steps. Please try again. (${error.message})</p>`;
+                }
+            });
+
+            closeNextStepsModal.addEventListener('click', () => {
+                nextStepsModal.classList.add('hidden');
+            });
+        });
+    </script>
+</body>
+</html>
